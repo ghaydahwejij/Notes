@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -403,50 +404,48 @@ fun note (nav: DestinationsNavigator,contact: Contact) {
 @Destination
 @Composable
 fun editNote(nav: DestinationsNavigator,contact: Contact){
-    var dialogOpen by remember {
-        mutableStateOf(false)
-    }
-    @Composable
-    fun MyUI() {
-        if (dialogOpen) {
-            AlertDialog(
-                onDismissRequest = {
 
-                    dialogOpen = false
-                },
-                confirmButton = {
-                    TextButton(onClick = {
-                        dialogOpen = false
-                    }) {
-                        Text(text = "Save")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = {
-                        dialogOpen = false
-                    }) {
-                        Text(text = "Dismiss")
-                    }
-                },
-                title = {
-                    Text(text = "Title")
-                },
-                text = {
-                    Text(text = "Description")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp),
-                shape = RoundedCornerShape(5.dp),
-                backgroundColor = Color.White,
-                properties = DialogProperties(
-                    dismissOnBackPress = true,
-                    dismissOnClickOutside = true
-                )
-            )
-        }
-
-    }
+//    @Composable
+//    fun MyUI() {
+//        if (dialogOpen) {
+//            AlertDialog(
+//                onDismissRequest = {
+//
+//                    dialogOpen = false
+//                },
+//                confirmButton = {
+//                    TextButton(onClick = {
+//                        dialogOpen = false
+//                    }) {
+//                        Text(text = "Save")
+//                    }
+//                },
+//                dismissButton = {
+//                    TextButton(onClick = {
+//                        dialogOpen = false
+//                    }) {
+//                        Text(text = "Dismiss")
+//                    }
+//                },
+//                title = {
+//                    Text(text = "Title")
+//                },
+//                text = {
+//                    Text(text = "Description")
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(32.dp),
+//                shape = RoundedCornerShape(5.dp),
+//                backgroundColor = Color.White,
+//                properties = DialogProperties(
+//                    dismissOnBackPress = true,
+//                    dismissOnClickOutside = true
+//                )
+//            )
+//        }
+//
+//    }
     var titleField by remember {
         mutableStateOf("")
     }
@@ -459,8 +458,43 @@ fun editNote(nav: DestinationsNavigator,contact: Contact){
         .background(color = Color(0xFFE0B27E)))
     {
         Row(modifier = Modifier.fillMaxWidth()) {
+            val openDialog = remember { mutableStateOf(false) }
+
+            if (openDialog.value) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog.value = false
+                    },
+                    text = {
+                        Text(
+                            "Save changes ?", fontSize = 15.sp, fontWeight = FontWeight.Bold
+                        )
+                    },
+                    buttons = {
+                        Row(
+                            modifier = Modifier
+                                .padding(all = 10.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Button(
+                                onClick = { openDialog.value = false }
+                            ) {
+                                Text("Save")
+                            }
+                            Button(
+
+                                onClick = { openDialog.value = false }
+                            ) {
+                                Text("Discard")
+                            }
+                        }
+                    }
+                )
+            }
+
             Button(onClick = {
-                dialogOpen = true
+                openDialog.value = true
 
                }
                , modifier = Modifier
